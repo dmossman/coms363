@@ -53,32 +53,32 @@ Primary key (CourseCode, StudentID),
 Foreign key (CourseCode, SectionNo) references Offering(CourseCode, SectionNo));
 
 -- Populate Person table - Item 7 
-load xml local infile 'U:\\COMS363\\Lab02\\UniversityXML\\Person.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Person.xml' 
 into table Person 
 rows identified by '<Person>';
 
 -- Populate Instructor table - Item 8 
-load xml local infile 'U:\\COMS363\\Lab02\\UniversityXML\\Instructor.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Instructor.xml' 
 into table Instructor 
 rows identified by '<Instructor>';
 
 -- Populate Student table - Item 9 
-load xml local infile 'U:\\COMS363\\Lab02\\UniversityXML\\Student.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Student.xml' 
 into table Student 
 rows identified by '<Student>';
 
 -- Populate Course table - Item 10 
-load xml local infile 'U:\\COMS363\\Lab02\\UniversityXML\\Course.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Course.xml' 
 into table Course 
 rows identified by '<Course>';
 
 -- Populate Offering table - Item 11 
-load xml local infile 'U:\\COMS363\\Lab02\\UniversityXML\\Offering.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Offering.xml' 
 into table Offering 
 rows identified by '<Offering>';
 
 -- Populate Enrollment table - Item 12 
-load xml local infile 'U:\\COMS363\\Lab02\\UniversityXML\\Enrollment.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Enrollment.xml' 
 into table Enrollment 
 rows identified by '<Enrollment>';
 
@@ -118,6 +118,14 @@ rows identified by '<Enrollment>';
 -- p.ID not in (select StudentID from Student) and
 -- p.ID not in (select InstructorID from Instructor);
 
+-- Item 21
+select p.Name, count(*) as Mentees from Person p, Instructor i, Student s
+where p.ID = i.InstructorID -- select only tuples where the person is the instructor
+and s.MentorID = i.InstructorID -- select only tuples where the instructor mentors the student
+group by p.ID -- grouping by instructor (group by p.ID, i.InstructorID, or s.MentorID identical)
+order by Mentees desc; -- sort by number of mentees
+
+-- Item 22
 
 
 
