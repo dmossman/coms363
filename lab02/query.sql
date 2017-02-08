@@ -119,14 +119,24 @@ rows identified by '<Enrollment>';
 -- p.ID not in (select InstructorID from Instructor);
 
 -- Item 21
-select p.Name, count(*) as Mentees from Person p, Instructor i, Student s
-where p.ID = i.InstructorID -- select only tuples where the person is the instructor
-and s.MentorID = i.InstructorID -- select only tuples where the instructor mentors the student
-group by p.ID -- grouping by instructor (group by p.ID, i.InstructorID, or s.MentorID identical)
-order by Mentees desc; -- sort by number of mentees
+-- select p.Name, count(*) as Mentees -- output name and number of rows in each group (4)
+-- from Person p, Instructor i, Student s -- take cross product of all three relations (1)
+-- where p.ID = i.InstructorID -- select only tuples where the person is the instructor (2)
+-- and s.MentorID = i.InstructorID -- select only tuples where the instructor mentors the student (2)
+-- group by p.ID -- grouping by instructor (group by p.ID, i.InstructorID, or s.MentorID identical) (3)
+-- order by Mentees desc; -- sort by number of mentees (5)
 
 -- Item 22
+-- select Classification, count(*) as NumStudents, avg(s.GPA) as AvgGPA
+-- from Student s
+-- group by Classification;
 
+-- Item 23
+-- not finished (I think we need a nested query with a min but I can't figure it out.
+select e.CourseCode, count(*) as NumEnrolled
+from Enrollment e, Student s
+where e.StudentID = s.StudentID
+group by CourseCode
 
 
 
