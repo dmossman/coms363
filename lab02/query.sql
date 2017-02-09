@@ -1,10 +1,3 @@
-Drop table Enrollment;
-Drop table Offering;
-Drop table Course;
-Drop table Student;
-Drop table Instructor;
-Drop table Person;
-
 -- Create Person table - Item 1
 create table Person (
 Name char (20),
