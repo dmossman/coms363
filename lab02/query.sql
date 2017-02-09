@@ -53,32 +53,32 @@ Primary key (CourseCode, StudentID),
 Foreign key (CourseCode, SectionNo) references Offering(CourseCode, SectionNo));
 
 -- Populate Person table - Item 7 
-load xml local infile 'E:\\coms363\\coms363\\lab02\\UniversityXML\\Person.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Person.xml' 
 into table Person 
 rows identified by '<Person>';
 
 -- Populate Instructor table - Item 8 
-load xml local infile 'E:\\coms363\\coms363\\lab02\\UniversityXML\\Instructor.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Instructor.xml' 
 into table Instructor 
 rows identified by '<Instructor>';
 
 -- Populate Student table - Item 9 
-load xml local infile 'E:\\coms363\\coms363\\lab02\\UniversityXML\\Student.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Student.xml' 
 into table Student 
 rows identified by '<Student>';
 
 -- Populate Course table - Item 10 
-load xml local infile 'E:\\coms363\\coms363\\lab02\\UniversityXML\\Course.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Course.xml' 
 into table Course 
 rows identified by '<Course>';
 
 -- Populate Offering table - Item 11 
-load xml local infile 'E:\\coms363\\coms363\\lab02\\UniversityXML\\Offering.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Offering.xml' 
 into table Offering 
 rows identified by '<Offering>';
 
 -- Populate Enrollment table - Item 12 
-load xml local infile 'E:\\coms363\\coms363\\lab02\\UniversityXML\\Enrollment.xml' 
+load xml local infile 'U:\\COMS363\\coms363\\lab02\\UniversityXML\\Enrollment.xml' 
 into table Enrollment 
 rows identified by '<Enrollment>';
 
@@ -132,11 +132,17 @@ from Student s
 group by Classification;
 
 -- Item 23
-select CourseCode, min(NumEnrolled) from
+select CourseCode, NumEnrolled from
 (select e.CourseCode, count(*) as NumEnrolled
 from Enrollment e, Student s
 where e.StudentID = s.StudentID
-group by CourseCode) as CourseEnrollment;
+group by CourseCode) as CourseEnrollment
+where NumEnrolled = (select min(NumEnrolled) from(
+	select count(*) as NumEnrolled
+	from Enrollment e, Student s
+	where e.StudentID = s.StudentID
+	group by CourseCode) as counts);
+-- There has got to be a better way to do that, but at least it works.
 
 -- Item 24
 select distinct s.StudentID, o.InstructorID from 
@@ -164,8 +170,8 @@ insert into Enrollment (CourseCode, SectionNo, StudentID, Grade)
 values ("CS330", 1, 480293439, "A-");
 
 select * from Person where ID = 480293439;
-select * from Student s where s.StudentID= ‘480293439’;
-select * from Enrollment e where e.StudentID = ‘480293439’;
+select * from Student s where s.StudentID= 480293439;
+select * from Enrollment e where e.StudentID = 480293439;
 
 -- Item 27
 delete Enrollment, Student from Enrollment inner join Student
@@ -174,13 +180,13 @@ where Student.GPA < 0.5 and Enrollment.StudentID = Student.StudentID;
 select * from Student s where s.GPA < 0.5;
 
 -- Item 28
--- skipped
+-- skipped because it was optional
 
 -- Item 29
 insert into Person (Name, ID, Address, DOB)
 values ("Trevor Horns", 000957303, "23 Canberra Street", '1964-11-23');
  
--- Select *
+Select *
 From Person P
 Where P.Name = "Trevor Horns";
 
